@@ -1,0 +1,6 @@
+name,process_type,capacity_per_hour,setup_time_minutes,is_available,specifications
+"Экструдер ЭП-63",extrusion,120.5,45,true,"Диаметр шнека 63мм, L/D=30"
+"Экструдер ЭП-90",extrusion,180.0,60,true,"Диаметр шнека 90мм, L/D=25"
+"Кольцевальная машина КМ-2000",ringing,85.3,30,true,"Макс. диаметр 2000мм"
+"Гофратор ГМ-1500 мягкий",corrugation_soft,95.0,25,false,"На техобслуживании"
+"Гофратор ГМ-2500 жесткий",corrugation_hard,75.5,35,true,"Давление до 150 атм" 

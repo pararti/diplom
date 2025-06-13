@@ -1,0 +1,106 @@
+services:
+  # База данных PostgreSQL
+  database:
+    image: postgres:15-alpine
+    container_name: atlantis_pack_db
+    restart: unless-stopped
+    env_file:
+      - config.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - atlantis_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API сервер (FastAPI)
+  api:
+    build: .
+    container_name: atlantis_pack_api
+    restart: unless-stopped
+    command: python main.py api
+    env_file:
+      - config.env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - OPTIMIZATION_ALGORITHM=${OPTIMIZATION_ALGORITHM}
+      - POPULATION_SIZE=${POPULATION_SIZE}
+      - MAX_GENERATIONS=${MAX_GENERATIONS}
+      - MUTATION_RATE=${MUTATION_RATE}
+      - CROSSOVER_RATE=${CROSSOVER_RATE}
+      - PLANNING_HORIZON_DAYS=${PLANNING_HORIZON_DAYS}
+      - WASTE_REDUCTION_TARGET=${WASTE_REDUCTION_TARGET}
+      - LOG_LEVEL=${LOG_LEVEL}
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - atlantis_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Веб-интерфейс (Vue.js)
+  web:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: atlantis_pack_web
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    networks:
+      - atlantis_network
+
+  # Инициализация данных (запускается один раз)
+  data_initializer:
+    build: .
+    container_name: atlantis_pack_init
+    command: python main.py setup
+    env_file:
+      - config.env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - atlantis_network
+    restart: "no"
+
+# Сети
+networks:
+  atlantis_network:
+    driver: bridge
+
+# Тома для данных
+volumes:
+  postgres_data:
+    driver: local 

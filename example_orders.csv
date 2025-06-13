@@ -1,0 +1,6 @@
+order_number,product_type,process_type,material_id,quantity_kg,color,caliber,width_mm,thickness_mm,order_date,delivery_date,priority
+ORD-TEST-001,shell,extrusion,1,500.5,красный,,1200,2.5,2025-05-25,2025-06-01,1
+ORD-TEST-002,film,extrusion,2,300.0,синий,,800,1.5,2025-05-25,2025-06-02,2
+ORD-TEST-003,shell,ringing,3,750.25,зеленый,D150,,,2025-05-25,2025-06-03,1
+ORD-TEST-004,label,corrugation_soft,4,200.0,прозрачный,,600,0.8,2025-05-25,2025-06-04,3
+ORD-TEST-005,film,corrugation_hard,5,450.75,черный,,1000,3.0,2025-05-25,2025-06-05,2 

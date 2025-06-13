@@ -1,0 +1,67 @@
+# Виртуальные окружения
+venv/
+env/
+.venv/
+.env/
+
+# Python кеш
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE файлы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Документация и README (если не нужны в контейнере)
+docs/
+*.md
+
+# Локальные данные (будут подключены через volumes)
+data/*.db
+logs/*.log
+
+# Тестовые файлы
+tests/
+.pytest_cache/
+
+# Конфигурационные файлы
+.env
+config.env
+config.local.env
+
+# Docker файлы
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# PDF файлы (техническое задание)
+*.pdf 
